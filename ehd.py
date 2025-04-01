@@ -2,16 +2,22 @@ import numpy as np
 import cv2 as cv
 from PIL import Image
 import matplotlib.pyplot as plt
+import os
 
-img_path = r'D:\Documents\1644.jpg'  # Dùng 'r' để tránh lỗi ký tự escape
+dataset_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\train_data'  # Dùng 'r' để tránh lỗi ký tự escape
+classes = ['car', 'chimney', 'cow', 'door', 'plane', 'skyoi', 'tableware', 'tree', 'window']
+labels =[]
+ehd_features = []
 
-img_pil = Image.open(img_path)  # Đọc ảnh bằng PIL
-img_array = np.array(img_pil)  # Chuyển thành mảng NumPy (RGB)
+#img_pil = Image.open(img_path)  # Đọc ảnh bằng PIL
+#img_array = np.array(img_pil)  # Chuyển thành mảng NumPy (RGB)
 
-plt.imshow(img_pil)
-plt.title('original image')
-plt.axis('on')
-plt.show()
+#plt.imshow(img_pil)
+#plt.title('original image')
+#plt.axis('on')
+#plt.show()
+
+
 
 def rgb_to_gray(img):
     r, g, b = img[:, :, 0], img[:, :, 1], img[:, :, 2]
@@ -36,16 +42,16 @@ def resize_image(img, target_size=(256, 256)):
     return img_resized
 
 # Chuyển sang grayscale
-img = rgb_to_gray(img_array)
+#img = rgb_to_gray(img_array)
 
 # Resize ảnh
-img = resize_image(img, target_size=(256, 256))
+#img = resize_image(img, target_size=(256, 256))
 
 # Hiển thị ảnh grayscale sau khi resize
-plt.imshow(img, cmap='gray')  # Dùng cmap='gray' để hiển thị đúng màu gray
-plt.title('gray image')
-plt.axis('on')
-plt.show()
+#plt.imshow(img, cmap='gray')  # Dùng cmap='gray' để hiển thị đúng màu gray
+#plt.title('gray image')
+#plt.axis('on')
+#plt.show()
 
 
 def find_ehd(img):
@@ -74,16 +80,16 @@ def find_ehd(img):
         K = K + int(M / 4)  # Tăng K để chuyển sang hàng tiếp theo
 
     # Hiển thị các khối
-    fig, axes = plt.subplots(4, 4, figsize=(10, 10))
-    fig.suptitle('16 Blocks of the Image', fontsize=16)
+    #fig, axes = plt.subplots(4, 4, figsize=(10, 10))
+    #fig.suptitle('16 Blocks of the Image', fontsize=16)
 
-    for idx, ax in enumerate(axes.flat):
-        ax.imshow(blocks[idx], cmap='gray')
-        ax.set_title(f'Block {idx + 1}')
-        ax.axis('off')
+    #for idx, ax in enumerate(axes.flat):
+    #    ax.imshow(blocks[idx], cmap='gray')
+    #    ax.set_title(f'Block {idx + 1}')
+    #    ax.axis('off')
 
-    plt.tight_layout()
-    plt.show()
+    #plt.tight_layout()
+    #plt.show()
 
     GlobalBin = np.mean(AllBins)
     AllBins[16, :] = np.round(GlobalBin)
@@ -97,17 +103,17 @@ def find_ehd(img):
     bars = plt.bar(edge_types, ehd, color=colors, edgecolor='black')
 
     # Thêm giá trị lên trên mỗi cột
-    for bar in bars:
-        yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.1, f'{yval:.1f}',
-                 ha='center', va='bottom', fontsize=10)
+    #for bar in bars:
+     #   yval = bar.get_height()
+     #   plt.text(bar.get_x() + bar.get_width() / 2, yval + 0.1, f'{yval:.1f}',
+     #            ha='center', va='bottom', fontsize=10)
 
-    plt.title('Edge Histogram Descriptor (EHD)', fontsize=14, pad=20)
-    plt.xlabel('Edge Type', fontsize=12)
-    plt.ylabel('Value', fontsize=12)
-    plt.grid(True, axis='y', linestyle='--', alpha=0.7)
-    plt.tight_layout()
-    plt.show()
+    #plt.title('Edge Histogram Descriptor (EHD)', fontsize=14, pad=20)
+    #plt.xlabel('Edge Type', fontsize=12)
+    #plt.ylabel('Value', fontsize=12)
+    #plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+    #plt.tight_layout()
+    #plt.show()
 
     return ehd
 
@@ -152,7 +158,35 @@ def get_bins(imgb):
         L = L + 2
     return bins
 
+def extract_ehd(image_path):
+    img_pil = Image.open(image_path)
+    img_array = np.array(img_pil)
+    img_gray = rgb_to_gray(img_array)
+    img_gray = resize_image(img_gray, target_size=(256, 256))  # Thêm resize
+    ehd = find_ehd(img_gray)
+    return ehd
 
+# Duyệt qua từng lớp
+for class_idx, class_name in enumerate(classes):
+    class_path = os.path.join(dataset_path, class_name)
+    for img_name in os.listdir(class_path):
+        img_path = os.path.join(class_path, img_name)
+        try:
+            # Trích xuất EHD
+            ehd = extract_ehd(img_path)
+            ehd_features.append(ehd)
+            labels.append(class_idx)
+        except Exception as e:
+            print(f"Error processing {img_path}: {e}")
+
+# Chuyển thành mảng NumPy
+ehd_features = np.array(ehd_features)  # Shape: (1000, 5)
+labels = np.array(labels)  # Shape: (1000,)
+
+np.save('ehd_features.npy', ehd_features)
+np.save('labels.npy', labels)
+
+print("Saved ehd_features and labels to files.")
 # Gọi hàm find_ehd
-ehd = find_ehd(img)
-print("EHD:", ehd)
+#ehd = find_ehd(img)
+#print("EHD:", ehd)
