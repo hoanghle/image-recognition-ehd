@@ -97,10 +97,10 @@ def find_ehd(img):
     ehd = ehd[0, -5:]
 
     # Vẽ biểu đồ cột cho EHD
-    edge_types = ['Vertical', 'Horizontal', 'Diagonal 45°', 'Diagonal 135°', 'Isotropic']
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']  # Màu sắc khác nhau cho từng loại cạnh
-    plt.figure(figsize=(8, 5))
-    bars = plt.bar(edge_types, ehd, color=colors, edgecolor='black')
+    #edge_types = ['Vertical', 'Horizontal', 'Diagonal 45°', 'Diagonal 135°', 'Isotropic']
+    #colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']  # Màu sắc khác nhau cho từng loại cạnh
+    #plt.figure(figsize=(8, 5))
+    #bars = plt.bar(edge_types, ehd, color=colors, edgecolor='black')
 
     # Thêm giá trị lên trên mỗi cột
     #for bar in bars:
