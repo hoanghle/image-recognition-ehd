@@ -6,14 +6,18 @@ from sklearn.metrics import accuracy_score, classification_report
 import joblib
 from sklearn.preprocessing import StandardScaler
 
+#đọc dữ liệu
 ehd_features = np.load('ehd_features.npy')
-
 labels = np.load('labels.npy')
 
 print ("shape of ehd_features:", ehd_features.shape)
 print("Shape of labels:", labels.shape)
 
-print("label:", labels[3])
+# In số lượng ảnh của từng nhãn
+unique, counts = np.unique(labels, return_counts=True)
+for label, count in zip(unique, counts):
+    print(f"Class {classes[label]}: {count} images")
+#print("label:", labels[3])
 
 # In tên nhãn đầu tiên
 #print("Label (class name):", classes[labels[0]])

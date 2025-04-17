@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 dataset_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\train_data'  # Dùng 'r' để tránh lỗi ký tự escape
-classes = ['car', 'chimney', 'cow', 'door', 'plane', 'skyoi', 'tableware', 'tree', 'window']
+classes = ['bus', 'car', 'plane', 'motorbike']
 labels =[]
 ehd_features = []
 
@@ -134,7 +134,7 @@ def get_bins(imgb):
     D45 = np.array([[1.414, 0], [0, -1.414]])
     D135 = np.array([[0, 1.414], [-1.414, 0]])
     Isot = np.array([[2, -2], [-2, 2]])
-    T = 50  # threshold
+    T = 50 # threshold
 
     nobr = int(M / 2)  # loop limits
     nobc = int(N / 2)  # loop limits
@@ -167,19 +167,26 @@ def extract_ehd(image_path):
     return ehd
 
 # Duyệt qua từng lớp
-for class_idx, class_name in enumerate(classes):
-    class_path = os.path.join(dataset_path, class_name)
-    for img_name in os.listdir(class_path):
-        img_path = os.path.join(class_path, img_name)
-        try:
-            # Trích xuất EHD
-            ehd = extract_ehd(img_path)
-            ehd_features.append(ehd)
-            labels.append(class_idx)
-        except Exception as e:
-            print(f"Error processing {img_path}: {e}")
+# thêm if __name__ == "__main__": để ko chạy lại ehd.py khi chạy training kia
+if __name__ == "__main__":
+    for class_idx, class_name in enumerate(classes):
+        class_path = os.path.join(dataset_path, class_name)
+        for img_name in os.listdir(class_path):
+            img_path = os.path.join(class_path, img_name)
+            try:
+                ehd = extract_ehd(img_path)
+                ehd_features.append(ehd)
+                labels.append(class_idx)
+            except Exception as e:
+                print(f"Error processing {img_path}: {e}")
 
+    ehd_features = np.array(ehd_features)
+    labels = np.array(labels)
+    np.save('ehd_features.npy', ehd_features)
+    np.save('labels.npy', labels)
+    print("Saved ehd_features and labels to files.")
 # Chuyển thành mảng NumPy
+'''
 ehd_features = np.array(ehd_features)  # Shape: (1000, 5)
 labels = np.array(labels)  # Shape: (1000,)
 
@@ -187,6 +194,7 @@ np.save('ehd_features.npy', ehd_features)
 np.save('labels.npy', labels)
 
 print("Saved ehd_features and labels to files.")
+'''
 # Gọi hàm find_ehd
 #ehd = find_ehd(img)
 #print("EHD:", ehd)

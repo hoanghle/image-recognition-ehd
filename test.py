@@ -16,7 +16,7 @@ def extract_ehd(image_path):
     ehd = find_ehd(img_gray)
     return ehd
 
-new_image_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\Test images\skytest.jpg'
+new_image_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\test_image\skytest.jpg'
 # Trích xuất EHD cho ảnh mới
 new_ehd = extract_ehd(new_image_path)
 new_ehd = new_ehd.reshape(1, -1)  # Reshape thành (1, 5)
