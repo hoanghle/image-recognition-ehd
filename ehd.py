@@ -4,8 +4,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import os
 
-dataset_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\train_data'  # Dùng 'r' để tránh lỗi ký tự escape
-classes = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
+dataset_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\train_data\corel-1000'  # Dùng 'r' để tránh lỗi ký tự escape
+classes = ['beaches', 'bus', 'dinosaurs', 'elephants', 'flowers', 'foods', 'horses', 'monuments', 'mountains_and_snow', 'peolpe_and_villages_in_Africa']
 labels =[]
 ehd_features = []
 
@@ -16,7 +16,6 @@ ehd_features = []
 #plt.title('original image')
 #plt.axis('on')
 #plt.show()
-
 
 
 def rgb_to_gray(img):
