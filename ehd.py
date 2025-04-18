@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 dataset_path = r'D:\Documents\tailieuhoctap\N4K2\Khaiphadldpt\train_data'  # Dùng 'r' để tránh lỗi ký tự escape
-classes = ['bus', 'car', 'plane', 'motorbike']
+classes = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
 labels =[]
 ehd_features = []
 
@@ -91,10 +91,11 @@ def find_ehd(img):
     #plt.tight_layout()
     #plt.show()
 
-    GlobalBin = np.mean(AllBins)
+    #GlobalBin = np.mean(AllBins)
+    GlobalBin = np.sum(AllBins[0:16, :], axis=0)
     AllBins[16, :] = np.round(GlobalBin)
     ehd = np.reshape(np.transpose(AllBins), [1, 85])
-    ehd = ehd[0, -5:]
+    #ehd = ehd[0, -5:]
 
     # Vẽ biểu đồ cột cho EHD
     #edge_types = ['Vertical', 'Horizontal', 'Diagonal 45°', 'Diagonal 135°', 'Isotropic']
